@@ -1,6 +1,6 @@
 {
-  "name": "@metamask/inpage-provider",
-  "version": "8.1.0",
+  "name": "@gasnow/inpage-provider",
+  "version": "0.1.1",
   "description": "A JavaScript Ethereum provider that connects to the wallet over a stream.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,21 +18,21 @@
     "prepublishOnly": "yarn require-clean-git && yarn lint && yarn test",
     "require-clean-git": "git diff --quiet || (echo 'Please clean the working directory.' && exit 1)"
   },
-  "author": "MetaMask",
+  "author": "gasnow-engineering",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/MetaMask/inpage-provider.git"
+    "url": "git+ssh://git@github.com/gasnow-engineering/inpage-provider.git"
   },
   "keywords": [
-    "MetaMask",
+    "Gasnow",
     "Ethereum",
     "Provider"
   ],
   "bugs": {
-    "url": "https://github.com/MetaMask/inpage-provider/issues"
+    "url": "https://github.com/gasnow-engineering/inpage-provider/issues"
   },
-  "homepage": "https://github.com/MetaMask/inpage-provider#readme",
+  "homepage": "https://github.com/gasnow-engineering/inpage-provider#readme",
   "files": [
     "dist/"
   ],
