@@ -91,6 +91,6 @@ export function initializeProvider({
 export function setGlobalProvider(
   providerInstance: GasnowInpageProvider,
 ): void {
-  (window as Record<string, any>).ethereum = providerInstance;
+  (window as Record<string, any>).gasnow = providerInstance;
   window.dispatchEvent(new Event('gasnow#initialized'));
 }
