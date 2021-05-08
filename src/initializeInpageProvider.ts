@@ -18,13 +18,13 @@ interface InitializeProviderOptions extends GasnowInpageProviderOptions {
   shouldSetOnWindow?: boolean;
 
   /**
-   * Whether the provider should be compatible for metamask.
+   * Whether the provider should be compatible for gasnow.
    */
   shouldCompatible?: boolean;
 }
 
 /**
- * Initializes a MetaMaskInpageProvider and (optionally) assigns it as window.ethereum.
+ * Initializes a GasnowInpageProvider and (optionally) assigns it as window.ethereum.
  *
  * @param options - An options bag.
  * @param options.connectionStream - A Node.js stream.

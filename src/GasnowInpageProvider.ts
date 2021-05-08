@@ -7,7 +7,7 @@ import { EMITTED_NOTIFICATIONS, getRpcPromiseCallback, NOOP } from './utils';
 import BaseProvider, {
   BaseProviderOptions,
   UnvalidatedJsonRpcRequest,
-} from './BaseProvider';
+} from './GasnowBaseProvider';
 
 export interface SendSyncJsonRpcRequest extends JsonRpcRequest<unknown> {
   method:
@@ -58,14 +58,14 @@ export default class GasnowInpageProvider extends BaseProvider {
   /**
    * Experimental methods can be found here.
    */
-  public readonly _metamask: ReturnType<
+  public readonly _gasnow: ReturnType<
     GasnowInpageProvider['_getExperimentalApi']
   >;
 
   public networkVersion: string | null;
 
   /**
-   * Indicating that this provider is a MetaMask provider.
+   * Indicating that this provider is a Gasnow provider.
    */
   public readonly isGasnow: true;
 
@@ -73,7 +73,7 @@ export default class GasnowInpageProvider extends BaseProvider {
    * @param connectionStream - A Node.js duplex stream
    * @param options - An options bag
    * @param options.jsonRpcStreamName - The name of the internal JSON-RPC stream.
-   * Default: metamask-provider
+   * Default: gasnow-provider
    * @param options.logger - The logging API to use. Default: console
    * @param options.maxEventListeners - The maximum number of event
    * listeners. Default: 100
@@ -100,7 +100,7 @@ export default class GasnowInpageProvider extends BaseProvider {
     this.sendAsync = this.sendAsync.bind(this);
     this._warnOfDeprecation = this._warnOfDeprecation.bind(this);
 
-    this._metamask = this._getExperimentalApi();
+    this._gasnow = this._getExperimentalApi();
 
     // handle JSON-RPC notifications
     this._jsonRpcConnection.events.on('notification', (payload) => {
@@ -195,7 +195,7 @@ export default class GasnowInpageProvider extends BaseProvider {
    *
    * @param isRecoverable - Whether the disconnection is recoverable.
    * @param errorMessage - A custom error message.
-   * @emits MetaMaskInpageProvider#disconnect
+   * @emits GasnowInpageProvider#disconnect
    */
   protected _handleDisconnect(isRecoverable: boolean, errorMessage?: string) {
     super._handleDisconnect(isRecoverable, errorMessage);
@@ -347,16 +347,16 @@ export default class GasnowInpageProvider extends BaseProvider {
 
   /**
    * Constructor helper.
-   * Gets experimental _metamask API as Proxy, so that we can warn consumers
+   * Gets experimental _gasnow API as Proxy, so that we can warn consumers
    * about its experiment nature.
    */
   protected _getExperimentalApi() {
     return new Proxy(
       {
         /**
-         * Determines if MetaMask is unlocked by the user.
+         * Determines if Gasnow is unlocked by the user.
          *
-         * @returns Promise resolving to true if MetaMask is currently unlocked
+         * @returns Promise resolving to true if Gasnow is currently unlocked
          */
         isUnlocked: async () => {
           if (!this._state.initialized) {
