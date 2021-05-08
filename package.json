@@ -1,5 +1,5 @@
 {
-  "name": "@gasnow-engineering/inpage-provider",
+  "name": "@gasnow/inpage-provider",
   "version": "0.1.0",
   "description": "A JavaScript Ethereum provider that connects to the wallet over a stream.",
   "main": "dist/index.js",
