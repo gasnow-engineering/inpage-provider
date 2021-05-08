@@ -26,7 +26,7 @@ initializeProvider({
   connectionStream: gasnowStream,
 });
 
-const { ethereum } = window;
+const { gasnow } = window;
 ```
 
 ### Types
