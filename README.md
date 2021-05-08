@@ -13,12 +13,12 @@ Implements the Ethereum JavaScript provider specification, [EIP-1193](https://ei
 ## Usage
 
 ```javascript
-import { initializeProvider } from "@gasnow/inpage-provider";
+import { initializeProvider } from '@gasnow/inpage-provider';
 
 // Create a stream to a remote provider:
 const gasnowStream = new LocalMessageDuplexStream({
-  name: "inpage",
-  target: "contentscript",
+  name: 'inpage',
+  target: 'contentscript',
 });
 
 // this will initialize the provider and set it as window.ethereum
@@ -26,7 +26,7 @@ initializeProvider({
   connectionStream: gasnowStream,
 });
 
-const { ethereum } = window;
+const { gasnow } = window;
 ```
 
 ### Types
