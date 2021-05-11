@@ -1,4 +1,4 @@
-import MetaMaskInpageProvider from './MetaMaskInpageProvider';
+import GasnonwInpageProvider from './GasnowInpageProvider';
 import createExternalExtensionProvider from './extension-provider/createExternalExtensionProvider';
 import BaseProvider from './BaseProvider';
 import {
@@ -9,7 +9,7 @@ import shimWeb3 from './shimWeb3';
 
 export {
   initializeProvider,
-  MetaMaskInpageProvider,
+  GasnonwInpageProvider,
   BaseProvider,
   setGlobalProvider,
   shimWeb3,

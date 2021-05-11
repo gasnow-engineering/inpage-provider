@@ -7,7 +7,7 @@ import { EMITTED_NOTIFICATIONS, getRpcPromiseCallback, NOOP } from './utils';
 import BaseProvider, {
   BaseProviderOptions,
   UnvalidatedJsonRpcRequest,
-} from './GasnowBaseProvider';
+} from './BaseProvider';
 
 export interface SendSyncJsonRpcRequest extends JsonRpcRequest<unknown> {
   method:
