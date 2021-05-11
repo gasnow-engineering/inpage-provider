@@ -97,7 +97,7 @@ export default class BaseProvider extends SafeEventEmitter {
 
   /**
    * The user's currently selected Ethereum address.
-   * If null, MetaMask is either locked or the user has not permitted any
+   * If null, Gasnow is either locked or the user has not permitted any
    * addresses to be viewed.
    */
   public selectedAddress: string | null;
@@ -106,7 +106,7 @@ export default class BaseProvider extends SafeEventEmitter {
    * @param connectionStream - A Node.js duplex stream
    * @param options - An options bag
    * @param options.jsonRpcStreamName - The name of the internal JSON-RPC stream.
-   * Default: metamask-provider
+   * Default: gasnow-provider
    * @param options.logger - The logging API to use. Default: console
    * @param options.maxEventListeners - The maximum number of event
    * listeners. Default: 100
@@ -114,7 +114,7 @@ export default class BaseProvider extends SafeEventEmitter {
   constructor(
     connectionStream: Duplex,
     {
-      jsonRpcStreamName = 'metamask-provider',
+      jsonRpcStreamName = 'gasnow-provider',
       logger = console,
       maxEventListeners = 100,
     }: BaseProviderOptions = {},
@@ -154,7 +154,7 @@ export default class BaseProvider extends SafeEventEmitter {
       connectionStream,
       (mux as unknown) as Duplex,
       connectionStream,
-      this._handleStreamDisconnect.bind(this, 'MetaMask'),
+      this._handleStreamDisconnect.bind(this, 'Gasnow'),
     );
 
     // setup own event listeners
@@ -171,7 +171,7 @@ export default class BaseProvider extends SafeEventEmitter {
       this._jsonRpcConnection.stream,
       (mux.createStream(jsonRpcStreamName) as unknown) as Duplex,
       this._jsonRpcConnection.stream,
-      this._handleStreamDisconnect.bind(this, 'MetaMask RpcProvider'),
+      this._handleStreamDisconnect.bind(this, 'Gasnow RpcProvider'),
     );
 
     // handle RPC requests via dapp-side rpc engine
@@ -186,18 +186,18 @@ export default class BaseProvider extends SafeEventEmitter {
     // handle JSON-RPC notifications
     this._jsonRpcConnection.events.on('notification', (payload) => {
       const { method, params } = payload;
-      if (method === 'metamask_accountsChanged') {
+      if (method === 'gasnow_accountsChanged') {
         this._handleAccountsChanged(params);
-      } else if (method === 'metamask_unlockStateChanged') {
+      } else if (method === 'gasnow_unlockStateChanged') {
         this._handleUnlockStateChanged(params);
-      } else if (method === 'metamask_chainChanged') {
+      } else if (method === 'gasnow_chainChanged') {
         this._handleChainChanged(params);
       } else if (EMITTED_NOTIFICATIONS.includes(method)) {
         this.emit('message', {
           type: method,
           data: params,
         });
-      } else if (method === 'METAMASK_STREAM_FAILURE') {
+      } else if (method === 'GASNOW_STREAM_FAILURE') {
         connectionStream.destroy(
           new Error(messages.errors.permanentlyDisconnected()),
         );
@@ -268,7 +268,7 @@ export default class BaseProvider extends SafeEventEmitter {
 
   /**
    * Constructor helper.
-   * Populates initial state by calling 'metamask_getProviderState' and emits
+   * Populates initial state by calling 'gasnow_getProviderState' and emits
    * necessary events.
    */
   private async _initializeState() {
@@ -279,7 +279,7 @@ export default class BaseProvider extends SafeEventEmitter {
         isUnlocked,
         networkVersion,
       } = (await this.request({
-        method: 'metamask_getProviderState',
+        method: 'gasnow_getProviderState',
       })) as {
         accounts: string[];
         chainId: string;
@@ -295,7 +295,7 @@ export default class BaseProvider extends SafeEventEmitter {
       this._handleAccountsChanged(accounts);
     } catch (error) {
       this._log.error(
-        'MetaMask: Failed to get initial state. Please report this bug.',
+        'Gasnow: Failed to get initial state. Please report this bug.',
         error,
       );
     } finally {
@@ -345,7 +345,7 @@ export default class BaseProvider extends SafeEventEmitter {
    * required events. Idempotent.
    *
    * @param chainId - The ID of the newly connected chain.
-   * @emits MetaMaskInpageProvider#connect
+   * @emits GasnowInpageProvider#connect
    */
   protected _handleConnect(chainId: string) {
     if (!this._state.isConnected) {
@@ -364,7 +364,7 @@ export default class BaseProvider extends SafeEventEmitter {
    *
    * @param isRecoverable - Whether the disconnection is recoverable.
    * @param errorMessage - A custom error message.
-   * @emits MetaMaskInpageProvider#disconnect
+   * @emits GasnowInpageProvider#disconnect
    */
   protected _handleDisconnect(isRecoverable: boolean, errorMessage?: string) {
     if (
@@ -400,7 +400,7 @@ export default class BaseProvider extends SafeEventEmitter {
   /**
    * Called when connection is lost to critical streams.
    *
-   * @emits MetamaskInpageProvider#disconnect
+   * @emits GasnowInpageProvider#disconnect
    */
   protected _handleStreamDisconnect(streamName: string, error: Error) {
     logStreamDisconnectWarning(this._log, streamName, error, this);
@@ -413,7 +413,7 @@ export default class BaseProvider extends SafeEventEmitter {
    * Does nothing if neither the chainId nor the networkVersion are different
    * from existing values.
    *
-   * @emits MetamaskInpageProvider#chainChanged
+   * @emits GasnowInpageProvider#chainChanged
    * @param networkInfo - An object with network info.
    * @param networkInfo.chainId - The latest chain ID.
    * @param networkInfo.networkVersion - The latest network ID.
@@ -430,7 +430,7 @@ export default class BaseProvider extends SafeEventEmitter {
       typeof networkVersion !== 'string'
     ) {
       this._log.error(
-        'MetaMask: Received invalid network parameters. Please report this bug.',
+        'Gasnow: Received invalid network parameters. Please report this bug.',
         { chainId, networkVersion },
       );
       return;
@@ -467,7 +467,7 @@ export default class BaseProvider extends SafeEventEmitter {
 
     if (!Array.isArray(accounts)) {
       this._log.error(
-        'MetaMask: Received invalid accounts parameter. Please report this bug.',
+        'Gasnow: Received invalid accounts parameter. Please report this bug.',
         accounts,
       );
       _accounts = [];
@@ -476,7 +476,7 @@ export default class BaseProvider extends SafeEventEmitter {
     for (const account of accounts) {
       if (typeof account !== 'string') {
         this._log.error(
-          'MetaMask: Received non-string account. Please report this bug.',
+          'Gasnow: Received non-string account. Please report this bug.',
           accounts,
         );
         _accounts = [];
@@ -490,7 +490,7 @@ export default class BaseProvider extends SafeEventEmitter {
       // returns
       if (isEthAccounts && this._state.accounts !== null) {
         this._log.error(
-          `MetaMask: 'eth_accounts' unexpectedly updated accounts. Please report this bug.`,
+          `Gasnow: 'eth_accounts' unexpectedly updated accounts. Please report this bug.`,
           _accounts,
         );
       }
@@ -527,7 +527,7 @@ export default class BaseProvider extends SafeEventEmitter {
   }: { accounts?: string[]; isUnlocked?: boolean } = {}) {
     if (typeof isUnlocked !== 'boolean') {
       this._log.error(
-        'MetaMask: Received invalid isUnlocked parameter. Please report this bug.',
+        'Gasnow: Received invalid isUnlocked parameter. Please report this bug.',
       );
       return;
     }
