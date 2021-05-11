@@ -1,10 +1,10 @@
-const { MetaMaskInpageProvider } = require('../dist');
-const { default: messages } = require('../dist/messages');
+const { GasnowInpageProvider } = require("../dist");
+const { default: messages } = require("../dist/messages");
 
-const MockDuplexStream = require('./mocks/DuplexStream');
+const MockDuplexStream = require("./mocks/DuplexStream");
 
-describe('MetaMaskInpageProvider: Miscellanea', () => {
-  describe('constructor', () => {
+describe("GasnowInpageProvider: Miscellanea", () => {
+  describe("constructor", () => {
     beforeAll(() => {
       jest.useFakeTimers();
     });
@@ -13,53 +13,53 @@ describe('MetaMaskInpageProvider: Miscellanea', () => {
       jest.runAllTimers();
     });
 
-    it('succeeds if stream is provided', () => {
+    it("succeeds if stream is provided", () => {
       expect(
-        () => new MetaMaskInpageProvider(new MockDuplexStream()),
+        () => new GasnowInpageProvider(new MockDuplexStream())
       ).not.toThrow();
     });
 
-    it('succeeds if stream and valid options are provided', () => {
+    it("succeeds if stream and valid options are provided", () => {
       const stream = new MockDuplexStream();
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new GasnowInpageProvider(stream, {
             maxEventListeners: 10,
-          }),
+          })
       ).not.toThrow();
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new GasnowInpageProvider(stream, {
             shouldSendMetadata: false,
-          }),
+          })
       ).not.toThrow();
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new GasnowInpageProvider(stream, {
             maxEventListeners: 10,
             shouldSendMetadata: false,
-          }),
+          })
       ).not.toThrow();
     });
 
-    it('throws if no or invalid stream is provided', () => {
-      expect(() => new MetaMaskInpageProvider()).toThrow(
-        messages.errors.invalidDuplexStream(),
+    it("throws if no or invalid stream is provided", () => {
+      expect(() => new GasnowInpageProvider()).toThrow(
+        messages.errors.invalidDuplexStream()
       );
 
-      expect(() => new MetaMaskInpageProvider('foo')).toThrow(
-        messages.errors.invalidDuplexStream(),
+      expect(() => new GasnowInpageProvider("foo")).toThrow(
+        messages.errors.invalidDuplexStream()
       );
 
-      expect(() => new MetaMaskInpageProvider({})).toThrow(
-        messages.errors.invalidDuplexStream(),
+      expect(() => new GasnowInpageProvider({})).toThrow(
+        messages.errors.invalidDuplexStream()
       );
     });
 
-    it('accepts valid custom logger', () => {
+    it("accepts valid custom logger", () => {
       const stream = new MockDuplexStream();
       const customLogger = {
         debug: console.debug,
@@ -72,17 +72,17 @@ describe('MetaMaskInpageProvider: Miscellanea', () => {
 
       expect(
         () =>
-          new MetaMaskInpageProvider(stream, {
+          new GasnowInpageProvider(stream, {
             logger: customLogger,
-          }),
+          })
       ).not.toThrow();
     });
   });
 
-  describe('isConnected', () => {
-    it('returns isConnected state', () => {
+  describe("isConnected", () => {
+    it("returns isConnected state", () => {
       jest.useFakeTimers();
-      const provider = new MetaMaskInpageProvider(new MockDuplexStream());
+      const provider = new GasnowInpageProvider(new MockDuplexStream());
       provider.autoRefreshOnNetworkChange = false;
 
       expect(provider.isConnected()).toBe(false);
