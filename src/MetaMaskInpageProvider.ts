@@ -83,7 +83,7 @@ export default class MetaMaskInpageProvider extends BaseProvider {
   constructor(
     connectionStream: Duplex,
     {
-      jsonRpcStreamName = 'gasnow-provider',
+      jsonRpcStreamName = 'metamask-provider',
       logger = console,
       maxEventListeners = 100,
       shouldSendMetadata = true,
