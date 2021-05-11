@@ -48,6 +48,8 @@ export interface BaseProviderOptions {
    * The maximum number of event listeners.
    */
   maxEventListeners?: number;
+
+  shouldCompatible?: boolean;
 }
 
 export interface RequestArguments {
