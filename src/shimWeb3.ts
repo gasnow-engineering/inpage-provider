@@ -1,4 +1,4 @@
-import MetaMaskInpageProvider from './MetaMaskInpageProvider';
+import GasnowInpageProvider from './GasnowInpageProvider';
 import { ConsoleLike } from './utils';
 
 /**
@@ -9,7 +9,7 @@ import { ConsoleLike } from './utils';
  * @param log - The logging API to use.
  */
 export default function shimWeb3(
-  provider: MetaMaskInpageProvider,
+  provider: GasnowInpageProvider,
   log: ConsoleLike = console,
 ): void {
   let loggedCurrentProvider = false;

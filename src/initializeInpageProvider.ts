@@ -1,5 +1,5 @@
 import { Duplex } from 'stream';
-import MetaMaskInpageProvider from './MetaMaskInpageProvider';
+// import MetaMaskInpageProvider from './MetaMaskInpageProvider';
 
 import GasnowInpageProvider, {
   GasnowInpageProviderOptions,
@@ -45,30 +45,12 @@ export function initializeProvider({
   shouldSendMetadata = true,
   shouldSetOnWindow = true,
 }: InitializeProviderOptions): GasnowInpageProvider {
-  if (
-    shouldCompatible &&
-    typeof (window as Record<string, any>).ethereum === 'undefined'
-  ) {
-    let metaMaskProvider = new MetaMaskInpageProvider(connectionStream, {
-      jsonRpcStreamName,
-      logger,
-      maxEventListeners,
-      shouldSendMetadata,
-    });
-    metaMaskProvider = new Proxy(metaMaskProvider, {
-      // some common libraries, e.g. web3@1.x, mess with our API
-      deleteProperty: () => true,
-    });
-
-    (window as Record<string, any>).ethereum = metaMaskProvider;
-    window.dispatchEvent(new Event('ethereum#initialized'));
-    shimWeb3(metaMaskProvider, logger);
-  }
   let provider = new GasnowInpageProvider(connectionStream, {
     jsonRpcStreamName,
     logger,
     maxEventListeners,
     shouldSendMetadata,
+    shouldCompatible,
   });
   provider = new Proxy(provider, {
     // some common libraries, e.g. web3@1.x, mess with our API
@@ -78,7 +60,14 @@ export function initializeProvider({
   if (shouldSetOnWindow) {
     setGlobalProvider(provider);
   }
-
+  if (
+    shouldCompatible &&
+    typeof (window as Record<string, any>).ethereum === 'undefined'
+  ) {
+    (window as Record<string, any>).ethereum = provider;
+    window.dispatchEvent(new Event('ethereum#initialized'));
+    shimWeb3(provider, logger);
+  }
   return provider;
 }
 
