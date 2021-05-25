@@ -50,7 +50,6 @@ export function initializeProvider({
     logger,
     maxEventListeners,
     shouldSendMetadata,
-    shouldCompatible,
   });
   provider = new Proxy(provider, {
     // some common libraries, e.g. web3@1.x, mess with our API
@@ -61,13 +60,14 @@ export function initializeProvider({
     setGlobalProvider(provider);
   }
   if (
-    shouldCompatible &&
+    !shouldCompatible ||
     typeof (window as Record<string, any>).ethereum === 'undefined'
   ) {
     (window as Record<string, any>).ethereum = provider;
     window.dispatchEvent(new Event('ethereum#initialized'));
     shimWeb3(provider, logger);
   }
+
   return provider;
 }
 

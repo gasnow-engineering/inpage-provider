@@ -65,11 +65,11 @@ export default class GasnowInpageProvider extends BaseProvider {
   public networkVersion: string | null;
 
   /**
-   * Indicating that this provider is a Gasnow provider.
+   * Indicating that this provider is a GasNow provider.
    */
-  public readonly isGasnow: true;
+  public readonly isGasNow: true;
 
-  public readonly isMetaMask: boolean;
+  public readonly isMetaMask: true;
 
   /**
    * @param connectionStream - A Node.js duplex stream
@@ -89,14 +89,13 @@ export default class GasnowInpageProvider extends BaseProvider {
       logger = console,
       maxEventListeners = 100,
       shouldSendMetadata = true,
-      shouldCompatible = true,
     }: GasnowInpageProviderOptions = {},
   ) {
     super(connectionStream, { jsonRpcStreamName, logger, maxEventListeners });
 
     this.networkVersion = null;
-    this.isGasnow = true;
-    this.isMetaMask = shouldCompatible;
+    this.isGasNow = true;
+    this.isMetaMask = true;
     this._sendSync = this._sendSync.bind(this);
     this.enable = this.enable.bind(this);
     this.send = this.send.bind(this);
